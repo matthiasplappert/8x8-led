@@ -114,32 +114,30 @@ bool isValid(int x, int y) {
   return true;
 }
 
+uint8_t writeNeighbor(uint8_t code, int code_offset, int x, int y) {
+  if (isValid(x, y)) {
+    bitWrite(code, code_offset, state[x][y]);
+  }
+  return code;
+}
+
 int getNeighbors(int x, int y) {
-  uint8_t code;
-  if (isValid(x - 1, y - 1)) {
-    bitWrite(code, 0, state[x - 1][y - 1]);
-  }
-  if (isValid(x - 1, y)) {
-    bitWrite(code, 1, state[x - 1][y]);
-  }
-  if (isValid(x - 1, y + 1)) {
-    bitWrite(code, 2, state[x - 1][y + 1]);
-  }
-  if (isValid(x, y - 1)) {
-    bitWrite(code, 3, state[x][y - 1]);
-  }
-  if (isValid(x, y + 1)) {
-    bitWrite(code, 4, state[x][y + 1]);
-  }
-  if (isValid(x + 1, y - 1)) {
-    bitWrite(code, 5, state[x + 1][y - 1]);
-  }
-  if (isValid(x + 1, y)) {
-    bitWrite(code, 6, state[x + 1][y - 1]);
-  }
-  if (isValid(x + 1, y + 1)) {
-    bitWrite(code, 7, state[x + 1][y - 1]);
-  }
+  uint8_t code = 0;
+
+  // Left
+  code = writeNeighbor(code, 0, x - 1, y - 1);
+  code = writeNeighbor(code, 1, x - 1, y);
+  code = writeNeighbor(code, 2, x - 1, y + 1);
+
+  // Center (ignore (x, y))
+  code = writeNeighbor(code, 3, x, y - 1);
+  code = writeNeighbor(code, 4, x, y + 1);
+
+  // Right
+  code = writeNeighbor(code, 5, x + 1, y - 1);
+  code = writeNeighbor(code, 6, x + 1, y);
+  code = writeNeighbor(code, 7, x + 1, y + 1);
+  
   return code;
 }
 
